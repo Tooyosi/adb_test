@@ -10,6 +10,13 @@ var models = {}
 models.Rooms = RoomsModel(sequelize, Sequelize)
 models.RoomsCategory = RoomsCategoryModel(sequelize, Sequelize)
 
+// models.Rooms.hasMany(models.RoomsCategory, {
+//         onDelete: 'CASCADE',
+//         foreignKey: 'category_id',
+//         as: 'category'
+//       })
+
+models.Rooms.belongsTo(models.RoomsCategory, { foreignKey: "category_id", as: "category", })
 
 sequelize.sync()
     .then((res) => {

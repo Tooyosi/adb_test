@@ -5,10 +5,12 @@ const Models = require('./database/connections/sequelize')
 const swaggerUi = require('swagger-ui-express');
 const specs = require('./swagger/index')
 const categoryRoutes = require('./routes/rooms/category')
+const roomRoutes = require('./routes/rooms/')
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
-app.use('/room/category', categoryRoutes)
+app.use('/category', categoryRoutes)
+app.use('/room', roomRoutes)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.get('/swagger.json', function(req, res) {

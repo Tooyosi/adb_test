@@ -1,22 +1,22 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const categoryController = require('../../controllers/rooms/category')
+const roomController = require('../../controllers/rooms')
 
 
 /**
  * @swagger
  * tags:
- *   name: Category 
- *   description: Room Category Routes
+ *   name: Room 
+ *   description: Room  Routes
  */
 
 
  /**
 * @swagger
-* /category:
+* /room:
 *   get:
-*     summary: Get all all room categories.
-*     tags: [Category]
+*     summary: Get all all rooms.
+*     tags: [Room]
 *     description: This Route fetches all categories.
 *     consumes:
 *       — application/json
@@ -26,16 +26,16 @@ const categoryController = require('../../controllers/rooms/category')
 *       400:
 *         description: Bad Request.
 */
-router.get('/', categoryController.getAllCategories)
+router.get('/', roomController.getAllRooms)
 /**
 * @swagger
-* /category:
+* /room:
 *   post:
-*     summary: Saving room category.
-*     tags: [Category]
-*     description: This Route saves a new room category.
+*     summary: Saving room.
+*     tags: [Room]
+*     description: This Route saves a new room.
 *     consumes:
-*       — application/json
+*       — application/json  
 *     parameters:
 *       - in: body
 *         name: body   
@@ -43,15 +43,15 @@ router.get('/', categoryController.getAllCategories)
 *         schema:
 *            type: object
 *            required:
-*              -name
-*              -noOfBeds
-*              -description
+*              -categoryId
+*              -checkinDate
+*              -checkOutDate
 *            properties:
-*              name:
-*                type: string
-*              noOfBeds:
+*              categoryId:
 *                type: integer
-*              description:
+*              checkinDate:
+*                type: string
+*              checkOutDate:
 *                type: string
 *
 *     responses: 
@@ -64,15 +64,15 @@ router.get('/', categoryController.getAllCategories)
 *       400:
 *         description: Bad Request.
 */
-router.post('/', categoryController.postCategory)
+router.post('/', roomController.postRoom)
 
 /**
 * @swagger
-* /category/{id}:
+* /room/{id}:
 *   put:
-*     summary: Edit Room category .
-*     tags: [Category]
-*     description: This Route edits single room category.
+*     summary: Edit Room  .
+*     tags: [Room]
+*     description: This Route edits single room.
 *     consumes:
 *       — application/json
 *     parameters:
@@ -82,18 +82,18 @@ router.post('/', categoryController.postCategory)
 *         schema:
 *           type: integer
 *           minimum: 1
-*           description: The Room category ID
+*           description: The Room ID
 *       - in: body
 *         name: body   
 *         required: true
 *         schema:
 *            type: object
 *            properties:
-*              name:
-*                type: string
-*              noOfBeds:
+*              categoryId:
 *                type: integer
-*              description:
+*              checkinDate:
+*                type: string
+*              checkOutDate:
 *                type: string
 *     responses: 
 *       200:
@@ -105,16 +105,16 @@ router.post('/', categoryController.postCategory)
 *       400:
 *         description: Bad Request.
 */
-router.put('/:id', categoryController.editCategory)
+router.put('/:id', roomController.editRoom)
 
 
 /**
 * @swagger
-* /category/{id}:
+* /room/{id}:
 *   delete:
-*     summary: Delete Room category .
-*     tags: [Category]
-*     description: This Route deletes single room category.
+*     summary: Delete Room  .
+*     tags: [Room]
+*     description: This Route deletes single room.
 *     consumes:
 *       — application/json
 *     parameters:
@@ -135,7 +135,7 @@ router.put('/:id', categoryController.editCategory)
 *       400:
 *         description: Bad Request.
 */
-router.delete('/:id', categoryController.deleteCategory)
+router.delete('/:id', roomController.deleteRoom)
 
 
 module.exports = router;
