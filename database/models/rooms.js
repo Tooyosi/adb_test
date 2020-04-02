@@ -14,14 +14,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       comment: "null"
     },
-    'checkin_date': {
-      type: DataTypes.DATEONLY,
+    'isBooked': {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
-      comment: "null"
-    },
-    'checkout_date': {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
+      defaultValue: false,
       comment: "null"
     },
     'createdAt': {

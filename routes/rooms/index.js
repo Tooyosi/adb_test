@@ -44,15 +44,9 @@ router.get('/', roomController.getAllRooms)
 *            type: object
 *            required:
 *              -categoryId
-*              -checkinDate
-*              -checkOutDate
 *            properties:
 *              categoryId:
 *                type: integer
-*              checkinDate:
-*                type: string
-*              checkOutDate:
-*                type: string
 *
 *     responses: 
 *       200:
@@ -65,6 +59,36 @@ router.get('/', roomController.getAllRooms)
 *         description: Bad Request.
 */
 router.post('/', roomController.postRoom)
+
+/**
+* @swagger
+* /room/{id}:
+*   get:
+*     summary: Get one Room  .
+*     tags: [Room]
+*     description: This Route fetches single room.
+*     consumes:
+*       — application/json
+*     parameters:
+*       - in: path
+*         name: id   
+*         required: true
+*         schema:
+*           type: integer
+*           minimum: 1
+*           description: The Room ID
+*     responses: 
+*       200:
+*         description: Successful.
+*         examples:
+*           status: true,
+*           description: Success,
+*           code: 00
+*       400:
+*         description: Bad Request.
+*/
+router.get('/:id', roomController.getOneRooms)
+
 
 /**
 * @swagger
@@ -91,10 +115,8 @@ router.post('/', roomController.postRoom)
 *            properties:
 *              categoryId:
 *                type: integer
-*              checkinDate:
-*                type: string
-*              checkOutDate:
-*                type: string
+*              isBooked:
+*               type: boolean
 *     responses: 
 *       200:
 *         description: Successful.
@@ -137,5 +159,46 @@ router.put('/:id', roomController.editRoom)
 */
 router.delete('/:id', roomController.deleteRoom)
 
-
+/**
+* @swagger
+* /room/{id}/book:
+*   post:
+*     summary: Booking Room.
+*     tags: [Room]
+*     description: This Route books a new room.
+*     consumes:
+*       — application/json  
+*     parameters:
+*       - in: path
+*         name: id   
+*         required: true
+*         schema:
+*           type: integer
+*           minimum: 1
+*           description: The Room Id
+*       - in: body
+*         name: body   
+*         required: true
+*         schema:
+*            type: object
+*            required:
+*              -checkInDate
+*              -checkOutDate
+*            properties:
+*              checkInDate:
+*                type: string
+*              checkOutDate:
+*                type: string
+*
+*     responses: 
+*       200:
+*         description: Receive a successful response.
+*         examples:
+*           status: true,
+*           description: Success,
+*           code: 00,
+*       400:
+*         description: Bad Request.
+*/
+router.post('/:id/book', roomController.bookRoom)
 module.exports = router;
