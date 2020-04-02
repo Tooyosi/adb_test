@@ -201,4 +201,96 @@ router.delete('/:id', roomController.deleteRoom)
 *         description: Bad Request.
 */
 router.post('/:id/book', roomController.bookRoom)
+
+/**
+* @swagger
+* /room/{id}/book/{bookingId}:
+*   put:
+*     summary: Booking Room.
+*     tags: [Room]
+*     description: This edits a booked room.
+*     consumes:
+*       — application/json  
+*     parameters:
+*       - in: path
+*         name: id   
+*         required: true
+*         schema:
+*           type: integer
+*           minimum: 1
+*           description: The Room Id
+*           name: bookingId
+*       - in: path
+*         name: bookingId   
+*         required: true
+*         schema:
+*           type: integer
+*           minimum: 1
+*           description: The booking Id
+*           name: bookingId
+*       - in: body
+*         name: body   
+*         required: true
+*         schema:
+*            type: object
+*            required:
+*              -isBooked
+*            properties:
+*              isBooked:
+*                type: boolean
+*              checkInDate:
+*                type: string
+*              checkOutDate:
+*                type: string
+*
+*     responses: 
+*       200:
+*         description: Receive a successful response.
+*         examples:
+*           status: true,
+*           description: Success,
+*           code: 00,
+*       400:
+*         description: Bad Request.
+*/
+router.put('/:id/book/:bookingId', roomController.editBookedRoom)
+
+/**
+* @swagger
+* /room/{id}/book/{bookingId}:
+*   delete:
+*     summary: Booking Room.
+*     tags: [Room]
+*     description: This deletes a booked room.
+*     consumes:
+*       — application/json  
+*     parameters:
+*       - in: path
+*         name: id   
+*         required: true
+*         schema:
+*           type: integer
+*           minimum: 1
+*           description: The Room Id
+*           name: bookingId
+*       - in: path
+*         name: bookingId   
+*         required: true
+*         schema:
+*           type: integer
+*           minimum: 1
+*           description: The booking Id
+*           name: bookingId
+*
+*     responses: 
+*       200:
+*         description: Receive a successful response.
+*         examples:
+*           status: true,
+*           description: Success,
+*           code: 00,
+*       400:
+*         description: Bad Request.
+*/
+router.delete('/:id/book/:bookingId', roomController.deleteBookedRoom)
 module.exports = router;
