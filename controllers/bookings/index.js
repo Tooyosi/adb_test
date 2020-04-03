@@ -13,11 +13,13 @@ module.exports = {
                 }
             })
             response = new ResponseClass(successStatus, successStatus, successCode, getAllBookings)
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         } catch (error) {
             logger.error(error.toString())
             response = new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)
+            res.status(400)
+            return res.send(response)
         }
     }),
 }

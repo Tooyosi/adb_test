@@ -10,7 +10,32 @@ const specs = require('./swagger/index')
 const categoryRoutes = require('./routes/rooms/category')
 const roomRoutes = require('./routes/rooms/')
 const bookingsRoutes = require('./routes/bookings/index')
+const createSubscriber =  require("pg-listen")
+const { Pool, Client } = require('pg')
 
+const client = new Client("postgres://postgres: @127.0.0.1/adb_test")
+
+let connectionfn = async ()=>{
+  let cli = await client.connect()
+
+ 
+}
+
+client.connect()
+const query = client.query('LISTEN addedrecord')
+
+// connectionfn()
+// client.on()
+const subscriber = createSubscriber({ connectionString: "postgres://postgres: @127.0.0.1/adb_test" })
+
+// subscriber.events.on("error", (error) => {
+//   console.error("Fatal database connection error:", error)
+//   process.exit(1)
+// })
+// subscriber.notifications.on("rooms", (payload) => {
+//   // Payload as passed to subscriber.notify() (see below)
+//   console.log("Received notification in 'my-channel':", payload)
+// })
 const models = require('./database/connections/sequelize')
 
 const adminRoutes = require('./routes/admin/')
@@ -26,15 +51,33 @@ const webSocket = new WebSocketServer({
 webSocket.on("request", (request) => {
 
   connection = request.accept(null, request.origin)
-  connection.on("open", () => console.log("Opennnn"))
-  connection.on("close", () => console.log("CLOSED"))
-  connection.on("message", (message) => {
-    console.log(`Received message ${message.utf8Data}`)
-  })
+  if(request.resourceURL.pathname == "/admin"){
+    connection.on("open", () => console.log("Opennnn"))
+    connection.on("close", () => console.log("CLOSED"))
+    connection.on("message", (message) => {
+      console.log(`Received message ${message.utf8Data}`)
+    })
+  
+    client.on('notification', async(data)=>{
+      // connection.send(data.payload)
+      let {id} = JSON.parse(data.payload)
+      let room = await Models.Rooms.findOne({
+        where:{
+          id: id
+        },
+        include: {
+          model: Models.RoomsCategory,
+          as: "category"
+      }
+      })
+      connection.send(`Room with id ${id} has just been booked. Room category is ${room.category.name}, description is ${room.category.description} and number of beds is ${room.category.no_of_beds}`)
+      // console.log(data)
+      // socketObj.push(data.payload)
+    })
+    connection.send("Hello client")
+  }
 
-  connection.send("Hello client")
-
-  sendEvery5seconds()
+  // sendEvery5seconds()
 })
 
 async function sendEvery5seconds() {
@@ -52,9 +95,31 @@ app.use('/room', roomRoutes)
 app.use('/booking', bookingsRoutes)
 
 
-app.get("/admin", (req, res) => {
- 
+app.get("/admin", async (req, res) => {
+  let socketObj = []
+  
+  
+  await client.on('notification', async(data)=>{
+    // connection.send(data.payload)
+    console.log(data)
+    socketObj.push(data.payload)
+  })
 
+  webSocket.on("request", (request) => {
+
+    connection = request.accept(null, request.origin)
+    connection.on("open", () => console.log("Opennnn"))
+    connection.on("close", () => console.log("CLOSED"))
+    connection.on("message", (message) => {
+      console.log(`Received message ${message.utf8Data}`)
+    })
+  
+    // connection.send(socketObj)
+  
+    
+
+  })
+  
 })
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
@@ -63,7 +128,7 @@ app.get('/swagger.json', function (req, res) {
   res.send(specs);
 });
 server.listen(PORT, async () => {
-
+ 
   console.log(`Server running at: http://localhost:${PORT}/`);
 });
 

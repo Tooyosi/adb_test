@@ -31,6 +31,11 @@ module.exports = function(sequelize, DataTypes) {
       comment: "null"
     }
   }, {
-    tableName: 'rooms'
+    tableName: 'rooms',
+    hooks:{
+      afterSave: (app)=>{
+        console.log("created")
+      }
+    }
   });
 };

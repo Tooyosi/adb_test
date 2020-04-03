@@ -8,7 +8,8 @@ module.exports = {
         let response
         if (categoryId < 1 || typeof (categoryId) !== "number") {
             response = new ResponseClass(failureStatus, validationError, failureCode, {});
-            return res.status(400).send(response)
+            res.status(400)
+            return res.send(response)
         }
 
         let category = await Models.RoomsCategory.findOne({
@@ -18,7 +19,8 @@ module.exports = {
         })
         if (category == null || category == undefined) {
             response = new ResponseClass(failureStatus, "Category doesnt exist", failureCode, {});
-            return res.status(400).send(response)
+            res.status(400)
+            return res.send(response)
         }
         try {
             let newRoom = await Models.Rooms.create({
@@ -28,11 +30,13 @@ module.exports = {
             })
 
             response = new ResponseClass(successStatus, successStatus, successCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         } catch (error) {
             logger.error(error.toString())
             response = new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         }
 
     }),
@@ -51,15 +55,19 @@ module.exports = {
             })
             if (getRoom == null || getRoom == undefined) {
                 response = new ResponseClass(failureStatus, "Room not found", failureCode, {});
-                return res.status(404).send(response)
+                res.status(404)
+                return res.send(response)
             } else {
                 response = new ResponseClass(successStatus, successStatus, successCode, getRoom)
-                return res.status(200).send(response)
+                res.status(200)
+                return res.send(response)
             }
         } catch (error) {
+            console.log(error)
             logger.error(error.toString())
             response = new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         }
     }),
     getAllRooms: ('/', async (req, res) => {
@@ -72,11 +80,13 @@ module.exports = {
                 }
             })
             response = new ResponseClass(successStatus, successStatus, successCode, getAllRooms)
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         } catch (error) {
             logger.error(error.toString())
             response = new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         }
     }),
 
@@ -90,7 +100,8 @@ module.exports = {
         // } else
         if (categoryId && categoryId < 1) {
             response = new ResponseClass(failureStatus, "Category doesnt exist", failureCode, {});
-            return res.status(400).send(response)
+            res.status(400)
+            return res.send(response)
         }
         if (categoryId !== undefined) {
             category = await Models.RoomsCategory.findOne({
@@ -100,7 +111,8 @@ module.exports = {
             })
             if (category == null || category == undefined) {
                 response = new ResponseClass(failureStatus, "Category doesnt exist", failureCode, {});
-                return res.status(400).send(response)
+                res.status(400)
+                return res.send(response)
             }
         }
         let updateObj = {
@@ -120,15 +132,18 @@ module.exports = {
             if (foundRoom !== null && foundRoom !== undefined) {
                 await foundRoom.update(updateObj)
                 response = new ResponseClass(successStatus, successStatus, successCode, {})
-                return res.status(200).send(response)
+                res.status(200)
+                return res.send(response)
             } else {
                 response = new ResponseClass(failureStatus, "Room not found", failureCode, {});
-                return res.status(404).send(response)
+                res.status(404)
+                return res.send(response)
             }
         } catch (error) {
             logger.error(error.toString())
             response = new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         }
     }),
 
@@ -139,21 +154,29 @@ module.exports = {
             let foundRoom = await Models.Rooms.findOne({
                 where: {
                     id: id
+                },
+                include: {
+                    model: Models.RoomsCategory,
+                    as: "category"
                 }
             })
-
+            
             if (foundRoom !== null && foundRoom !== undefined) {
                 await foundRoom.destroy()
                 response = new ResponseClass(successStatus, successStatus, successCode, {})
-                return res.status(200).send(response)
+                res.status(200)
+                return res.send(response)
             } else {
                 response = new ResponseClass(failureStatus, "Room not found", failureCode, {});
-                return res.status(404).send(response)
+                res.status(404)
+                return res.send(response)
             }
         } catch (error) {
+            console.log(error)
             logger.error(error.toString())
             response = new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         }
     }),
 
@@ -162,7 +185,8 @@ module.exports = {
         let { checkInDate, checkOutDate } = req.body
         if (checkInDate.trim() == "" || checkOutDate.trim() == "") {
             response = new ResponseClass(failureStatus, validationError, failureCode, {});
-            return res.status(400).send(response)
+            res.status(400)
+            return res.send(response)
         }
         let response
         try {
@@ -172,11 +196,13 @@ module.exports = {
 
             if (room == null || room == undefined) {
                 response = new ResponseClass(failureStatus, "Room not found", failureCode, {});
-                return res.status(404).send(response)
+                res.status(404)
+                return res.send(response)
             }
             if (room.isBooked == true) {
                 response = new ResponseClass(failureStatus, "Room is currently booked", failureCode, {});
-                return res.status(400).send(response)
+                res.status(400)
+                return res.send(response)
             }
             let newBooking = await Models.Bookings.create({
                 room_id: id,
@@ -191,11 +217,13 @@ module.exports = {
                 updatedAt: new Date()
             })
             response = new ResponseClass(successStatus, successStatus, successCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         } catch (error) {
             logger.error(error.toString())
             response = new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         }
     }),
 
@@ -204,7 +232,8 @@ module.exports = {
         let { checkInDate, checkOutDate, isBooked } = req.body
         if (checkInDate.trim() == "" && checkOutDate.trim() == "" && typeof (isBooked) !== "boolean") {
             response = new ResponseClass(failureStatus, validationError, failureCode, {});
-            return res.status(400).send(response)
+            res.status(400)
+            return res.send(response)
         }
         let response
         try {
@@ -214,7 +243,8 @@ module.exports = {
 
             if (room == null || room == undefined) {
                 response = new ResponseClass(failureStatus, "Room not found", failureCode, {});
-                return res.status(404).send(response)
+                res.status(404)
+                return res.send(response)
             }
             let updateObj = {
                 updatedAt: new Date()
@@ -235,7 +265,8 @@ module.exports = {
 
             if (foundBooking == null || room == foundBooking) {
                 response = new ResponseClass(failureStatus, "Booking not found", failureCode, {});
-                return res.status(404).send(response)
+                res.status(404)
+                return res.send(response)
             }
             await foundBooking.update(updateObj)
             await room.update({
@@ -243,11 +274,13 @@ module.exports = {
                 updatedAt: new Date()
             })
             response = new ResponseClass(successStatus, successStatus, successCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         } catch (error) {
             logger.error(error.toString())
             response = new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         }
     }),
 
@@ -260,7 +293,8 @@ module.exports = {
 
             if (room == null || room == undefined) {
                 response = new ResponseClass(failureStatus, "Room not found", failureCode, {});
-                return res.status(404).send(response)
+                res.status(404)
+                return res.send(response)
             }
 
             let foundBooking = await Models.Bookings.findOne({
@@ -272,17 +306,20 @@ module.exports = {
 
             if (foundBooking == null || room == foundBooking) {
                 response = new ResponseClass(failureStatus, "Booking not found", failureCode, {});
-                return res.status(404).send(response)
+                res.status(404)
+                return res.send(response)
             }else{
                 await foundBooking.destroy()
             response = new ResponseClass(successStatus, successStatus, successCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
             }
 
         } catch (error) {
             logger.error(error.toString())
             response = new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         }
     })
 }

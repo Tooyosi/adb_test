@@ -12,9 +12,14 @@ models.RoomsCategory = RoomsCategoryModel(sequelize, Sequelize)
 models.Bookings = BookingsModel(sequelize, Sequelize)
 
 
-models.Rooms.belongsTo(models.RoomsCategory, { foreignKey: "category_id", as: "category", })
+models.Rooms.belongsTo(models.RoomsCategory, { foreignKey: "category_id", as: "category" })
+models.RoomsCategory.hasMany(models.Rooms,  {foreignKey: "category_id", onDelete: 'cascade', hooks: true })
 models.Bookings.belongsTo(models.Rooms, { foreignKey: "room_id", as: "room" })
+models.Rooms.hasMany(models.Bookings,  {foreignKey: "room_id",  onDelete: 'cascade', hooks: true })
 
+// models.Rooms.hooks('afterCreate', ()=>{
+    
+// })
 sequelize.sync()
     .then((res) => {
 

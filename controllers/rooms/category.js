@@ -8,7 +8,8 @@ module.exports = {
         let response
         if(name.trim() == "" || noOfBeds < 1 || description.trim() == "" || typeof(noOfBeds) !== "number"){
             response = new ResponseClass(failureStatus, validationError,failureCode, {} );
-            return res.status(400).send(response)
+            res.status(400)
+            return res.send(response)
         }
         try {
             let newCategory = await Models.RoomsCategory.create({
@@ -19,26 +20,28 @@ module.exports = {
                 updatedAt: new Date(),
             })            
             response =  new ResponseClass(successStatus, successStatus, successCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         } catch (error) {
             logger.error(error.toString())
             response =  new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)
+            res.status(200)
+            return res.send(response)
         }
 
     }),
 
     getAllCategories: ('/', async (req, res)=>{
-
-        console.log("here")
         try {
             let getAllCategories = await Models.RoomsCategory.findAll()
             response =  new ResponseClass(successStatus, successStatus, successCode, getAllCategories)
-            return res.status(200).send(response)            
+            res.status(200)
+            return res.send(response)            
         } catch (error) {
             logger.error(error.toString())
             response =  new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)            
+            res.status(400)
+            return res.send(response)            
         }
     }),
 
@@ -46,13 +49,14 @@ module.exports = {
         let {id} = req.params
         let {name, noOfBeds, description} = req.body;
         let response
-        console.log(noOfBeds < 1 )
         if(name.trim() == "" && noOfBeds <! 1 && description.trim() == "" && typeof(noOfBeds) !== "number"){
             response = new ResponseClass(failureStatus, validationError,failureCode, {} );
-            return res.status(400).send(response)
+            res.status(400)
+            return res.send(response)
         }else if(noOfBeds && noOfBeds < 1 ){
             response = new ResponseClass(failureStatus, "No of beds can't be less than 1",failureCode, {} );
-            return res.status(400).send(response)
+            res.status(400)
+            return res.send(response)
         }
         let updateObj = {
             updatedAt: new Date()
@@ -76,15 +80,18 @@ module.exports = {
             if(foundCategory !== null && foundCategory !== undefined){
                 await foundCategory.update(updateObj)
                 response =  new ResponseClass(successStatus, successStatus, successCode, {})
-                return res.status(200).send(response)
+                res.status(200)
+                return res.send(response)
             }else{
                 response = new ResponseClass(failureStatus, "Category not found",failureCode, {} );
-                return res.status(400).send(response)
+                res.status(404)
+                return res.send(response)
             }
         } catch (error) {
             logger.error(error.toString())
             response =  new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)              
+            res.status(200)
+            return res.send(response)              
         }
     }),
 
@@ -101,15 +108,18 @@ module.exports = {
             if(foundCategory !== null && foundCategory !== undefined){
                 await foundCategory.destroy()
                 response =  new ResponseClass(successStatus, successStatus, successCode, {})
-                return res.status(200).send(response)
+                res.status(200)
+                return res.send(response)
             }else{
                 response = new ResponseClass(failureStatus, "Category not found",failureCode, {} );
-                return res.status(400).send(response)
+                res.status(400)
+                return res.send(response)
             }
         } catch (error) {
             logger.error(error.toString())
             response =  new ResponseClass(failureStatus, error.toString(), failureCode, {})
-            return res.status(200).send(response)              
+            res.status(400)
+            return res.send(response)              
         }
     })
 }
