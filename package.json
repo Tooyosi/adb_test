@@ -26,7 +26,8 @@
   },
   "scripts": {
     "test": "mocha tests/**/*Tests.js --timeout 10000",
-    "testRoute": "mocha tests/**/routesTests.js --timeout 10000"
+    "testRoute": "mocha tests/**/routesTests.js --timeout 10000",
+    "testController": "mocha tests/**/controllerTests.js --timeout 10000"
   },
   "author": "",
   "license": "ISC"

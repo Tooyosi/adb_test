@@ -3,7 +3,7 @@ let connection
 const express = require('express');
 const http = require("http");
 const app = express();
-const PORT = 8080;
+// const PORT = process.env.PORT? process.env.PORT : 8080;
 const Models = require('./database/connections/sequelize')
 const swaggerUi = require('swagger-ui-express');
 const specs = require('./swagger/index')
@@ -12,8 +12,11 @@ const roomRoutes = require('./routes/rooms/')
 const bookingsRoutes = require('./routes/bookings/index')
 const createSubscriber =  require("pg-listen")
 const { Pool, Client } = require('pg')
+require('dotenv').config()
 
-const client = new Client("postgres://postgres: @127.0.0.1/adb_test")
+const PORT = process.env.PORT ||8080;
+
+const client = new Client(process.env.DEV_DATABASE_URL)
 
 let connectionfn = async ()=>{
   let cli = await client.connect()

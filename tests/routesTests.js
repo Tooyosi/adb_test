@@ -81,57 +81,11 @@ describe('Route Tests', () => {
                 done();
             })
         }),
-        // describe('Delete /room/{id}', function () {
+        describe('Delete /room/{id}', function () {
 
-        //     it('it should edit a delete room', (done) => {
-        //         chai.request(app)
-        //             .put('/room/3')
-        //             .end((err, res) => {
-        //                 expect(res).to.have.status(200)
-        //                 expect(res).to.have.property('body')
-        //                 expect(res.body).to.be.a('object')
-        //                 expect(res.body).to.have.property('status').eql(successStatus)
-        //                 expect(res.body).to.have.property('code').eql(successCode)
-        //                 expect(res.body).to.have.property('data')
-        //                 expect(res.body.data).to.be.a('object')
-        //                 if (err) return done(err)
-        //             })
-        //         done();
-        //     })
-        // }),
-
-        // describe('Post /room/{id}/book', function () {
-
-        //     it('it should book room', (done) => {
-        //         chai.request(app)
-        //             .post('/room/3/book')
-        //             .send({
-        //                 "checkInDate": "2020-3-11",
-        //                 "checkOutDate": "2020-3-13"
-        //               })
-        //             .end((err, res) => {
-        //                 expect(res).to.have.status(200)
-        //                 expect(res).to.have.property('body')
-        //                 expect(res.body).to.be.a('object')
-        //                 expect(res.body).to.have.property('status').eql(successStatus)
-        //                 expect(res.body).to.have.property('code').eql(successCode)
-        //                 expect(res.body).to.have.property('data')
-        //                 expect(res.body.data).to.be.a('object')
-        //                 if (err) return done(err)
-        //             })
-        //         done();
-        //     })
-        // }),
-        describe('Put /room/{id}/book/{bookingId}', function () {
-
-            it('it should edit a rooms booking', (done) => {
+            it('it should edit a delete room', (done) => {
                 chai.request(app)
-                    .put('/room/3/book/4')
-                    .send({
-                        "isBooked": false,
-                        "checkInDate": "2020-3-11",
-                        "checkOutDate": "2020-3-13"
-                      })
+                    .put('/room/3')
                     .end((err, res) => {
                         expect(res).to.have.status(200)
                         expect(res).to.have.property('body')
@@ -146,24 +100,70 @@ describe('Route Tests', () => {
             })
         }),
 
-        // describe('Delete /room/{id}/book/{bookingId}', function () {
+        describe('Post /room/{id}/book', function () {
 
-        //     it('it should delete a rooms booking', (done) => {
-        //         chai.request(app)
-        //             .delete('/room/3/book/5')
-        //             .end((err, res) => {
-        //                 expect(res).to.have.status(200)
-        //                 expect(res).to.have.property('body')
-        //                 expect(res.body).to.be.a('object')
-        //                 expect(res.body).to.have.property('status').eql(successStatus)
-        //                 expect(res.body).to.have.property('code').eql(successCode)
-        //                 expect(res.body).to.have.property('data')
-        //                 expect(res.body.data).to.be.a('object')
-        //                 if (err) return done(err)
-        //             })
-        //         done();
-        //     })
-        // }),
+            it('it should book room', (done) => {
+                chai.request(app)
+                    .post('/room/3/book')
+                    .send({
+                        "checkInDate": "2020-3-11",
+                        "checkOutDate": "2020-3-13"
+                    })
+                    .end((err, res) => {
+                        expect(res).to.have.status(200)
+                        expect(res).to.have.property('body')
+                        expect(res.body).to.be.a('object')
+                        expect(res.body).to.have.property('status').eql(successStatus)
+                        expect(res.body).to.have.property('code').eql(successCode)
+                        expect(res.body).to.have.property('data')
+                        expect(res.body.data).to.be.a('object')
+                        if (err) return done(err)
+                    })
+                done();
+            })
+        }),
+        describe('Put /room/{id}/book/{bookingId}', function () {
+
+            it('it should edit a rooms booking', (done) => {
+                chai.request(app)
+                    .put('/room/3/book/4')
+                    .send({
+                        "isBooked": false,
+                        "checkInDate": "2020-3-11",
+                        "checkOutDate": "2020-3-13"
+                    })
+                    .end((err, res) => {
+                        expect(res).to.have.status(200)
+                        expect(res).to.have.property('body')
+                        expect(res.body).to.be.a('object')
+                        expect(res.body).to.have.property('status').eql(successStatus)
+                        expect(res.body).to.have.property('code').eql(successCode)
+                        expect(res.body).to.have.property('data')
+                        expect(res.body.data).to.be.a('object')
+                        if (err) return done(err)
+                    })
+                done();
+            })
+        }),
+
+        describe('Delete /room/{id}/book/{bookingId}', function () {
+
+            it('it should delete a rooms booking', (done) => {
+                chai.request(app)
+                    .delete('/room/3/book/5')
+                    .end((err, res) => {
+                        expect(res).to.have.status(200)
+                        expect(res).to.have.property('body')
+                        expect(res.body).to.be.a('object')
+                        expect(res.body).to.have.property('status').eql(successStatus)
+                        expect(res.body).to.have.property('code').eql(successCode)
+                        expect(res.body).to.have.property('data')
+                        expect(res.body.data).to.be.a('object')
+                        if (err) return done(err)
+                    })
+                done();
+            })
+        }),
 
         describe('Get /booking', function () {
 
@@ -212,7 +212,7 @@ describe('Route Tests', () => {
                         "name": "e2e test",
                         "noOfBeds": 2,
                         "description": "e2e description"
-                      })
+                    })
                     .end((err, res) => {
                         expect(res).to.have.status(200)
                         expect(res).to.have.property('body')
@@ -236,7 +236,7 @@ describe('Route Tests', () => {
                         "name": "e2e test",
                         "noOfBeds": 4,
                         "description": "e2e description"
-                      })
+                    })
                     .end((err, res) => {
                         expect(res).to.have.status(200)
                         expect(res).to.have.property('body')
@@ -270,5 +270,5 @@ describe('Route Tests', () => {
             })
         })
 
-        
+
 })
